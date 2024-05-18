@@ -10,13 +10,21 @@ const cookieParser = require('cookie-parser');
 
 const path = require("path")
 const app = express();
-app.use(express.json());
-const corsOptions = {
-    origin: 'https://mohankrishna1201f.onrender.com', // Remove trailing slash
-    credentials: true,
-    optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+const allowedOrigins = ['https://mohankrishna1201f.onrender.com'];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization'
+}));
+
+app.options('*', cors());
 
 
 
@@ -58,8 +66,14 @@ app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
     const newUser = new User({ username, password: hashedPassword });
-    await newUser.save();
-    res.status(201).send('User created');
+    try {
+        await newUser.save();
+        alert('User created');
+    }
+    catch (error) {
+        alert(`${error}`)
+
+    }
 });
 
 app.post('/login', async (req, res) => {
@@ -69,14 +83,17 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: user._id }, 'secretkey', { expiresIn: '1h' });
         res.cookie('token', token, { httpOnly: true, secure: false }); // Set secure: true in production
         res.status(200).send('Logged in successfully');
+        alert('logged in succesfully')
     } else {
         res.status(400).send('Invalid credentials');
+        alert('bad credentials')
     }
 });
 
 app.post('/logout', (req, res) => {
     res.clearCookie('token');
     res.send('Logged out successfully');
+    alert('logged out succesfully')
 });
 
 // CRUD Operations for Employees with Authentication
