@@ -11,19 +11,14 @@ const cookieParser = require('cookie-parser');
 const path = require("path")
 const app = express();
 app.use(express.json());
-// const corsOptions = {
-//     origin: 'http://localhost:5173', // Remove trailing slash
-//     credentials: true,
-//     optionsSuccessStatus: 200,
-// };
-// app.use(cors(corsOptions));
+const corsOptions = {
+    origin: 'https://mohankrishna1201f.onrender.com', // Remove trailing slash
+    credentials: true,
+    optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
-//deploy
-const __dirname1 = path.resolve();
-app.use(express.static(path.join(__dirname, './frontend/dist')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname1, 'frontend', 'dist', 'index.html'))
-})
+
 
 app.use(cookieParser());
 
