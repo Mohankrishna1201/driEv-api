@@ -11,10 +11,10 @@ const path = require("path")
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: 'https://mohankrishna1201f.onrender.com/', // Update this with your frontend URL
+    origin: 'https://mohankrishna1201f.onrender.com', // Remove trailing slash
     credentials: true,
+    optionsSuccessStatus: 200,
 };
-
 app.use(cors(corsOptions));
 
 
