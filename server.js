@@ -1,4 +1,5 @@
 
+const env = require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -11,7 +12,7 @@ const path = require("path")
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: 'https://mohankrishna1201f.onrender.com', // Remove trailing slash
+    origin: 'http://localhost:5173/', // Remove trailing slash
     credentials: true,
     optionsSuccessStatus: 200,
 };
@@ -21,9 +22,10 @@ app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
-
-
-mongoose.connect('mongodb+srv://admin:AJj6aEVKqGrMs70u@cluster0.zht4cn6.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
+console.log('MongoDB_URI:', process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Failed to connect to MongoDB', err));
 
 const userSchema = new mongoose.Schema({
     username: String,
