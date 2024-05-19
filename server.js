@@ -12,7 +12,7 @@ const path = require("path")
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: 'https://dri-ev.vercel.app/', 
+    origin: 'https://dri-ev.vercel.app', 
     METHODS :["POST,GET,PUT,DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -55,7 +55,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Routes
-app.get('/', async (req,res) =>{
+app.get('/OK', async (req,res) =>{
     await res.send('hello');
 });
     
