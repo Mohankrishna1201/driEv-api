@@ -1,4 +1,3 @@
-
 const env = require('dotenv').config();
 
 const express = require('express');
@@ -8,19 +7,26 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const path = require("path")
+const path = require("path");
 const app = express();
 app.use(express.json());
+
+// CORS configuration
+const whitelist = ['https://dri-ev.vercel.app', 'http://localhost:3000']; // Add your frontend URL to the whitelist
 const corsOptions = {
-    origin: '*', 
-    methods :["POST,GET,PUT,DELETE"],
-    credentials: true,
+    origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ["POST", "GET", "PUT", "DELETE"],  // Allow specific methods
+    credentials: true,  // Allow credentials (cookies, authorization headers)
     optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
-
-
-
 app.use(cookieParser());
 
 console.log('MongoDB_URI:', process.env.MONGODB_URI);
@@ -58,7 +64,7 @@ const authenticateToken = (req, res, next) => {
 app.get('/OK', async (req, res) => {
     res.send('hello');
 });
-    
+
 app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -74,7 +80,6 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: user._id }, 'secretkey', { expiresIn: '1h' });
         res.cookie('token', token, { httpOnly: true, secure: false }); // Set secure: true in production
         res.status(200).send('Logged in successfully');
-
     } else {
         res.status(400).send('Invalid credentials');
     }
@@ -107,6 +112,16 @@ app.delete('/employees/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     await Employee.findByIdAndDelete(id);
     res.send('Employee deleted');
+});
+
+// Error handling middleware for CORS issues
+app.use((err, req, res, next) => {
+    if (err) {
+        console.error('CORS error:', err);
+        res.status(500).send('CORS error occurred');
+    } else {
+        next();
+    }
 });
 
 app.listen(5000, () => console.log('Server running on port 5000'));
