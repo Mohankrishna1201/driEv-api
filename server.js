@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 const corsOptions = {
     origin: 'https://dri-ev.vercel.app', 
-    METHODS :["POST,GET,PUT,DELETE"],
+    methods :["POST,GET,PUT,DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
 };
