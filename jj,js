@@ -12,8 +12,8 @@ const path = require("path")
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: 'http://localhost:5173',
-    METHODS: ["POST,GET,PUT,DELETE"],
+    origin: '*',
+    methods: ["POST,GET,PUT,DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
 };
@@ -24,7 +24,7 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 console.log('MongoDB_URI:', process.env.MONGODB_URI);
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
@@ -108,5 +108,5 @@ app.delete('/employees/:id', authenticateToken, async (req, res) => {
     await Employee.findByIdAndDelete(id);
     res.send('Employee deleted');
 });
-console.log(process.env.PORT);
-app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
+
+app.listen(5000, () => console.log('Server running on port 5000'));
