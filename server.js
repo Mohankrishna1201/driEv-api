@@ -12,7 +12,7 @@ const path = require("path")
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: true, 
+    origin: '*', 
     methods :["POST,GET,PUT,DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
