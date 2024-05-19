@@ -11,18 +11,10 @@ const path = require("path");
 const app = express();
 app.use(express.json());
 
-// CORS configuration
-const whitelist = ['https://dri-ev.vercel.app', 'http://localhost:3000']; // Add your frontend URL to the whitelist
+// CORS configuration to allow access from any origin
 const corsOptions = {
-    origin: (origin, callback) => {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: '*',  // Allow any origin
     methods: ["POST", "GET", "PUT", "DELETE"],  // Allow specific methods
-    credentials: true,  // Allow credentials (cookies, authorization headers)
     optionsSuccessStatus: 200,
 };
 
