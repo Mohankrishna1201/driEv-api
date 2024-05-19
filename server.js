@@ -12,7 +12,8 @@ const path = require("path")
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: 'http://localhost:5173', // Remove trailing slash
+    origin: 'https://dri-ev.vercel.app/', 
+    METHODS :["POST,GET,PUT,DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
 };
@@ -54,6 +55,10 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Routes
+app.get('/', async (req,res) =>{
+    await res.send('hello');
+});
+    
 app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 10);
