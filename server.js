@@ -13,16 +13,12 @@ app.use(express.json());
 
 // CORS configuration to allow access from any origin
 const corsOptions = {
-<<<<<<< HEAD
     origin: 'http://localhost:5173',
     METHODS: ["POST,GET,PUT,DELETE"],
     credentials: true,
-=======
-    origin: '*',  // Allow any origin
-    methods: ["POST", "GET", "PUT", "DELETE"],  // Allow specific methods
->>>>>>> 393c1a9e8bf5ab7644921a042582e9166a5b1b6c
     optionsSuccessStatus: 200,
 };
+
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
